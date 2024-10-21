@@ -6,6 +6,9 @@ description:
   long: "BTC RPC Explorer is a web-based explorer for the Bitcoin blockchain that connects to your node's RPC interface to ensure privacy and control over your data."
 wrapper-repo: "https://github.com/j34g/btc-rpc-explorer-wrapper"
 license: MIT
+release-notes: |
+  - Initial release of BTC RPC Explorer for StartOS.
+  - Includes basic functionality to explore Bitcoin blocks, transactions, and addresses.
 mounts:
   - name: data
     path: /data
