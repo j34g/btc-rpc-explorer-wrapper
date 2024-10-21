@@ -1,27 +1,36 @@
 # The package identifier used by the OS. This must be unique amongst all other known packages
 id: btc-rpc-explorer-j34g  # Unique identifier for your package
+
 # A human-readable service title
 title: "BTC RPC Explorer"
+
 # Service version - indicates the current version of your service
-version: 1.0.0
+version: "1.0.0"
+
 # Release notes for the update - can be a string, paragraph, or URL
 release-notes: |
   - Initial release of BTC RPC Explorer for StartOS.
   - Includes basic functionality to explore Bitcoin blocks, transactions, and addresses.
-# The type of license for the project. Include the LICENSE in the root of the project directory.
+
+# The type of license for the project
 license: MIT
-# The repository URL for the package. This repo contains the manifest file (this), any scripts necessary for configuration, backups, actions, or health checks.
+
+# The repository URL for the package
 wrapper-repo: "https://github.com/j34g/btc-rpc-explorer-wrapper"
-# The original project repository URL.
+
+# The original project repository URL
 upstream-repo: "https://github.com/janoside/btc-rpc-explorer"
-# URL to the support site / channel for the project. This can link to the issues page of your upstream repository.
+
+# URL to the support site/channel for the project
 support-site: "https://github.com/janoside/btc-rpc-explorer/issues"
-# URL to the marketing site for the project.
+
+# URL to the marketing site for the project
 marketing-site: "https://start9.com/"
-# The series of commands to build the project into an s9pk for arm64/v8.
+
+# The series of commands to build the project into an s9pk
 build: ["make"]  # Example build command; adjust as necessary
 
-# Human-readable descriptors for the service.
+# Human-readable descriptors for the service
 description:
   short: "A web-based Bitcoin blockchain explorer."
   long: |
@@ -29,28 +38,21 @@ description:
 
 # Assets necessary for packaging the service
 assets:
-  license: LICENSE  # Path to the license file
-  icon: icon.png    # Path to the icon file
+  license: LICENSE          # Path to the license file
+  icon: icon.png            # Path to the icon file
   instructions: instructions.md  # Path to instructions file
 
+# Main configuration for the service
 main:
-  # Docker is currently the only action implementation
   type: docker
-  # Identifier for the main image volume
   image: btc-rpc-explorer:latest
-  # The executable binary for starting the initialization action
   entrypoint: "npm start"
-  # Any arguments that should be passed into the entrypoint executable 
   args: []
-  # Specifies where to mount the data volume(s)
   mounts:
-    - name: data
-      path: /data
+    main: /data  # Specify where the data volume is mounted
+  gpu-acceleration: false
 
-# Specifies whether GPU acceleration is enabled or not. False by default.
-gpu-acceleration: false
-
-# Defines what architectures will be supported by the service
+# Hardware requirements for the service
 hardware-requirements:
   arch:
     - amd64
@@ -63,7 +65,7 @@ health-checks:
     success-message: BTC RPC Explorer is accessible
     type: script
 
-# This denotes any data, asset, or pointer volumes
+# Define the volumes for the service
 volumes:
   main:
     type: data
@@ -77,11 +79,11 @@ interfaces:
     description: "Web UI for BTC RPC Explorer"
     tor-config:
       port-mapping:
-        "80": "3002"  # Mapping external port 80 to internal port 3002
+        "80": "3002"  # Map external port 80 to internal port 3002
     lan-config:
       "443":
         ssl: true
-        internal: 3002  # Mapping for LAN access
+        internal: 3002  # Map for LAN access
     ui: true
     protocols:
       - tcp
@@ -98,10 +100,10 @@ backup:
       - duplicity
       - create
       - /mnt/backup
-      - /root/data
+      - /data
     mounts:
-      BACKUP: "/mnt/backup"
-      main: "/root/data"
+      BACKUP: /mnt/backup
+      main: /data
   restore:
     type: docker
     image: compat
@@ -111,10 +113,10 @@ backup:
       - duplicity
       - restore
       - /mnt/backup
-      - /root/data
+      - /data
     mounts:
-      BACKUP: "/mnt/backup"
-      main: "/root/data"
+      BACKUP: /mnt/backup
+      main: /data
 
 # Migration settings for handling upgrades
 migrations:
@@ -126,3 +128,4 @@ migrations:
     "*":
       type: script
       args: ["to"]
+
