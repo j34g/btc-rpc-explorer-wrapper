@@ -1,4 +1,4 @@
-id:btcrpcexplorer
+id: btcrpcexplorer
 version: 1.0.0
 title: BTC RPC Explorer
 description:
@@ -11,13 +11,11 @@ license: MIT
 wrapper-repo: "https://github.com/j34g/btc-rpc-explorer-wrapper"
 upstream-repo: "https://github.com/janoside/btc-rpc-explorer"
 
-# Defines the architectures supported by the service
 hardware-requirements:
   arch:
     - amd64
     - arm64
 
-# Specifies the main containerization entry point
 main: 
   type: docker
   image: btc-rpc-explorer:latest
@@ -32,24 +30,20 @@ main:
       protocol: http
       port: 3002
 
-# Configures GPU acceleration (if applicable). Set to false by default.
 gpu-acceleration: false
 
-# Defines any health checks for the service
 health-checks:
   web-ui:
     name: Web Interface
     success-message: BTC RPC Explorer is accessible
     type: script
 
-# Defines persistent data volumes used by the service
 volumes:
   main:
     type: data
     readonly: false
     source: /mnt/data/btc-rpc-explorer
 
-# Describes network interfaces
 interfaces:
   main:
     name: User Interface
@@ -66,10 +60,6 @@ interfaces:
       - tcp
       - http
 
-# Specifies dependencies, if any. This is empty for now.
-dependencies: {}
-
-# Backup settings for the service, using the StartOS backup system
 backup:
   create:
     type: docker
@@ -98,7 +88,6 @@ backup:
       BACKUP: "/mnt/backup"
       main: "/root/data"
 
-# Migration settings for handling upgrades from/to different versions
 migrations:
   from:
     "*":
