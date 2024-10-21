@@ -1,22 +1,24 @@
+---
 id: btcrpcexplorer
 version: 1.0.0
 title: BTC RPC Explorer
 description:
-  short: "A web-based Bitcoin blockchain explorer."
-  long: "BTC RPC Explorer is a web-based explorer for the Bitcoin blockchain that connects to your node's RPC interface, ensuring privacy and control over your data."
-release-notes: |
+  short: A web-based Bitcoin blockchain explorer.
+  long: BTC RPC Explorer is a web-based explorer for the Bitcoin blockchain that
+    connects to your node's RPC interface, ensuring privacy and control over
+    your data.
+release-notes: >
   - Initial release of BTC RPC Explorer for StartOS.
+
   - Includes basic functionality to explore Bitcoin blocks, transactions, and addresses.
 license: MIT
-wrapper-repo: "https://github.com/j34g/btc-rpc-explorer-wrapper"
-upstream-repo: "https://github.com/janoside/btc-rpc-explorer"
-
+wrapper-repo: https://github.com/j34g/btc-rpc-explorer-wrapper
+upstream-repo: https://github.com/janoside/btc-rpc-explorer
 hardware-requirements:
   arch:
     - amd64
     - arm64
-
-main: 
+main:
   type: docker
   image: btc-rpc-explorer:latest
   entrypoint: npm start
@@ -25,41 +27,36 @@ main:
       path: /data
   interfaces:
     - name: Web UI
-      description: "Web UI for BTC RPC Explorer"
+      description: Web UI for BTC RPC Explorer
       ui: true
       protocol: http
       port: 3002
-
 gpu-acceleration: false
-
 health-checks:
   web-ui:
     name: Web Interface
     success-message: BTC RPC Explorer is accessible
     type: script
-
 volumes:
   main:
     type: data
     readonly: false
     source: /mnt/data/btc-rpc-explorer
-
 interfaces:
   main:
     name: User Interface
     description: Web UI for BTC RPC Explorer
     tor-config:
       port-mapping:
-        80: "3002"
+        "80": "3002"
     lan-config:
-      443:
+      "443":
         ssl: true
         internal: 3002
     ui: true
     protocols:
       - tcp
       - http
-
 backup:
   create:
     type: docker
@@ -72,8 +69,8 @@ backup:
       - /mnt/backup
       - /root/data
     mounts:
-      BACKUP: "/mnt/backup"
-      main: "/root/data"
+      BACKUP: /mnt/backup
+      main: /root/data
   restore:
     type: docker
     image: compat
@@ -85,16 +82,17 @@ backup:
       - /mnt/backup
       - /root/data
     mounts:
-      BACKUP: "/mnt/backup"
-      main: "/root/data"
-
+      BACKUP: /mnt/backup
+      main: /root/data
 migrations:
   from:
     "*":
       type: script
-      args: ["from"]
+      args:
+        - from
   to:
     "*":
       type: script
-      args: ["to"]
+      args:
+        - to
 
