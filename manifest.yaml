@@ -3,15 +3,35 @@ version: 1.0.0
 title: BTC RPC Explorer
 description:
   short: "A web-based Bitcoin blockchain explorer."
-  long: "BTC RPC Explorer is a web-based explorer for the Bitcoin blockchain that connects to your node's RPC interface to ensure privacy and control over your data."
-wrapper-repo: "https://github.com/j34g/btc-rpc-explorer-wrapper"
-license: MIT
+  long: "BTC RPC Explorer is a web-based explorer for the Bitcoin blockchain that connects to your node's RPC interface, ensuring privacy and control over your data."
 release-notes: |
   - Initial release of BTC RPC Explorer for StartOS.
   - Includes basic functionality to explore Bitcoin blocks, transactions, and addresses.
-mounts:
-  - name: data
-    path: /data
+license: MIT
+wrapper-repo: "https://github.com/j34g/btc-rpc-explorer-wrapper"
+upstream-repo: "https://github.com/janoside/btc-rpc-explorer"
+archs:
+  - amd64
+  - arm64
+containers:
+  btc-rpc-explorer:
+    image: btc-rpc-explorer:latest
+    system: true
+    entrypoint: npm start
+    mounts:
+      - name: data
+        path: /data
+    interfaces:
+      - name: RPC Explorer UI
+        description: "Web UI for BTC RPC Explorer"
+        ui: true
+        protocol: http
+        port: 3002
+volumes:
+  data:
+    type: bind
+    readonly: false
+    source: /mnt/data/btc-rpc-explorer
 ports:
   - 3002: BTC Explorer Web UI
 
