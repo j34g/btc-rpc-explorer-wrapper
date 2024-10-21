@@ -38,11 +38,10 @@ BTC RPC Explorer is a web-based explorer for the Bitcoin blockchain that connect
 """
 
 # Assets necessary for packaging the service
-assets = { 
-    license = "LICENSE"  # Path to the license file
-    icon = "icon.png"    # Path to the icon file
-    instructions = "instructions.md"  # Path to instructions file
-}
+[assets]
+license = "LICENSE"        # Path to the license file
+icon = "icon.png"          # Path to the icon file
+instructions = "instructions.md"  # Path to instructions file
 
 # Main configuration for the service
 [[main]]
