@@ -1,0 +1,114 @@
+# The package identifier used by the OS. This must be unique amongst all other known packages
+id = "btc-rpc-explorer-j34g"  # Unique identifier for your package
+
+# A human-readable service title
+title = "BTC RPC Explorer"
+
+# Service version - indicates the current version of your service
+version = "1.0.0"
+
+# Release notes for the update - can be a string, paragraph, or URL
+release-notes = """
+- Initial release of BTC RPC Explorer for StartOS.
+- Includes basic functionality to explore Bitcoin blocks, transactions, and addresses.
+"""
+
+# The type of license for the project
+license = "MIT"
+
+# The repository URL for the package
+wrapper-repo = "https://github.com/j34g/btc-rpc-explorer-wrapper"
+
+# The original project repository URL
+upstream-repo = "https://github.com/janoside/btc-rpc-explorer"
+
+# URL to the support site/channel for the project
+support-site = "https://github.com/janoside/btc-rpc-explorer/issues"
+
+# URL to the marketing site for the project
+marketing-site = "https://start9.com/"
+
+# The series of commands to build the project into an s9pk
+build = ["make"]  # Example build command; adjust as necessary
+
+# Human-readable descriptors for the service
+description = """
+A web-based Bitcoin blockchain explorer.
+BTC RPC Explorer is a web-based explorer for the Bitcoin blockchain that connects to your node's RPC interface, ensuring privacy and control over your data.
+"""
+
+# Assets necessary for packaging the service
+assets = { 
+    license = "LICENSE"  # Path to the license file
+    icon = "icon.png"    # Path to the icon file
+    instructions = "instructions.md"  # Path to instructions file
+}
+
+# Main configuration for the service
+[[main]]
+type = "docker"
+image = "btc-rpc-explorer:latest"
+entrypoint = "npm start"
+args = []
+
+# Specifies where to mount the data volume(s)
+[mounts]
+main = "/data"
+
+gpu-acceleration = false
+
+# Hardware requirements for the service
+[hardware-requirements]
+arch = ["amd64", "arm64"]
+
+# Health checks for the service
+[health-checks.web-ui]
+name = "Web Interface"
+success-message = "BTC RPC Explorer is accessible"
+type = "script"
+
+# Volumes for the service
+[volumes.main]
+type = "data"
+readonly = false
+source = "/mnt/data/btc-rpc-explorer"
+
+# Interface configurations
+[[interfaces.main]]
+name = "User Interface"
+description = "Web UI for BTC RPC Explorer"
+[interfaces.main.tor-config]
+port-mapping = { "80" = "3002" }
+
+[interfaces.main.lan-config]
+"443" = { ssl = true, internal = "3002" }
+ui = true
+protocols = ["tcp", "http"]
+
+# Backup configurations for the service
+[backup.create]
+type = "docker"
+image = "compat"
+system = true
+entrypoint = "compat"
+args = ["duplicity", "create", "/mnt/backup", "/root/data"]
+
+[backup.create.mounts]
+BACKUP = "/mnt/backup"
+main = "/root/data"
+
+[backup.restore]
+type = "docker"
+image = "compat"
+system = true
+entrypoint = "compat"
+args = ["duplicity", "restore", "/mnt/backup", "/root/data"]
+
+[backup.restore.mounts]
+BACKUP = "/mnt/backup"
+main = "/root/data"
+
+# Migration settings for handling upgrades
+[migrations]
+from = { "*" = { type = "script", args = ["from"] } }
+to = { "*" = { type = "script", args = ["to"] } }
